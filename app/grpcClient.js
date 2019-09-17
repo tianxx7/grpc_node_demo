@@ -1,4 +1,4 @@
-var PROTO_PATH = "D:\project\Front-end project\grpc_demo\proto\Student.proto";
+var PROTO_PATH = "D:\\project\\Front-end project\\grpc_demo\\proto\\Student.proto";
 var grpc = require("grpc");
 var grpcService = grpc.load(PROTO_PATH).txx.proto;
 
