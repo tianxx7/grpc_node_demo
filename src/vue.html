@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <!-- <hello-world></hello-world>
+        <hello-world></hello-world>
+        <hello-world></hello-world>
+        <hello-world></hello-world>
+        <hello></hello> -->
+        <my-content :componentProp='title' :content='content'></my-content>
+    </div>
+
+    <script>   
+        Vue.component("helloWorld",{
+            data(){ //在组件中data不是对象是一个函数,返回一个对象
+                return {
+                    msg:"hello world1"
+                };
+            },
+            template:`
+            <div>
+                <button @click='handleClick'>点击</button>
+                <span>{{ msg }}</span>
+            </div>
+            `,
+            methods:{
+                handleClick(){
+                    this.msg='haha';
+                }
+            }
+        })
+        
+        const vm = new Vue({
+            el:"#app",
+            data:{
+                title:'今天是12月14日',
+                content:1122233
+            },
+            components:{
+                myContent:{
+                    //props:['componentprop','content'], // 注册属性   //组件中使用的数据需要注册
+                    props:{
+                        componentprop:{
+                            type:String
+                        },
+                        content:{
+                            type:Number
+                        }
+                    },
+                    template:`
+                        <div>
+                            <h4>{{ componentprop }}</h4>  
+                            <p>{{content}}</p>
+                        </div>
+                    `
+                }
+            }
+        });
+
+
+    </script>
+    
+</body>
+</html>
+<!-- <script src="./vueTest.js"></script> -->
