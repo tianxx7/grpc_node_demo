@@ -1,12 +1,32 @@
 <template>
     <div class='progress'
-    :class="[status? 'is-${status}':'']">
-        <div class='progress-bar'>
+    :class="[
+        status? 'is-${status}':'',
+        `progress--${type}`]">
+        <div class='progress-bar' v-if="type == 'line'">
             <div class="progress-bar_outer" :style="{height:strokeWidth+'px'}">
                 <div class="progress-bar_inner" :style="barStyle">
                     <div class="progress-bar_innerText" v-if="showText && textInside">{{percentage}}%</div>
                 </div>
             </div>
+        </div>
+        <div class="progress-circle"
+            :style="{width:width+'px',height:width+'px'}"
+         v-else>
+            <svg viewBox="0 0 100 100">
+                <path :d="trackPath"
+                fill="none"  
+                :stroke-width="relativeStrokeWidth" 
+                stroke="#e5e9f2" /> 
+
+                <path 
+                :d="trackPath"
+                fill="none"  
+                :stroke-width="relativeStrokeWidth" 
+                :stroke="stroke" 
+                :style="circlePathStyle"
+                stroke-linecap="round"/>
+            </svg>
         </div>
         <div class='progress-text' v-if="showText && !textInside"  :style="{fontSize:progressTextSize+'px'}">
             <template v-if='!status'>{{ percentage }} %</template>
@@ -46,6 +66,10 @@ export default {
         },
         color:{
             type:String
+        },
+        width:{
+            type:Number,
+            default:126
         }
     },
     computed:{
@@ -77,6 +101,29 @@ export default {
             } else {
                 return this.status == 'success'
                 ?'icon-check':'icon-close';
+            }
+        },
+        trackPath(){
+            const radius = 50 - this.relativeStrokeWidth/2;
+            return `
+            M 50 50  
+            m 0 -${radius} 
+            a ${radius} ${radius} 0 1 1 0 ${radius * 2}
+            a ${radius} ${radius} 0 1 1 0 -${radius * 2}
+            `;
+        },
+        relativeStrokeWidth(){
+            return this.strokeWidth * 100 /this.width;
+        },
+        perimeter(){
+            const radius = 50 - this.relativeStrokeWidth/2;
+            return 2 * Math.PI * radius;
+        },
+        circlePathStyle(){
+            const perimeter = this.perimeter;
+            return {
+                strokeDasharray:`${perimeter}px,${perimeter}px`,
+                strokeDashoffset:(1 - this.percentage /100)*perimeter +'px'
             }
         }
     }
@@ -139,5 +186,17 @@ export default {
         display: inline-block;
         margin-left: 10px;
         color: #606266;
+    }
+    .progress--circle{
+        display: inline-block;
+        position: relative;
+    }
+    .progress--circle .progress-text{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        text-align: center;
+        margin-left: 0;
     }
 </style>

@@ -4,6 +4,8 @@
         <d-progress :percentage="65" />
         <d-progress :percentage="70"  :text-inside="true" :stroke-width="18"/>
         <d-progress :percentage="50" :show-text="false" :stroke-width="18"/>
+        <h4>环形进度条</h4>
+        <d-progress :percentage="50" type="circle"  :stroke-width="6"/>
     </div>
 </template>
 
